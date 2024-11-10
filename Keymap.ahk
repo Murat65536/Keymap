@@ -69,17 +69,19 @@ class Keymap extends Gui {
                 ["/", "?", unset]
             ],
             [
-                ["Ctrl", "Ctrl", unset],
-                ["LWin", "LWin", unset],
-                ["Alt", "Alt", unset],
                 ["Space", "Space", unset]
-
             ]
         ]
         super.__New()
         super.OnEvent("Close", (*) => ExitApp())
-        this.ShiftActive := super.AddCheckbox("x10 y10", "Shift")
+        this.CtrlActive := super.AddCheckbox("x10 y10", "Ctrl")
+        this.CtrlActive.OnEvent("Click", (*) => this.__SetCharacters())
+        this.ShiftActive := super.AddCheckbox("x10 y30", "Shift")
         this.ShiftActive.OnEvent("Click", (*) => this.__SetCharacters())
+        this.WinActive := super.AddCheckbox("x10 y50", "Win")
+        this.WinActive.OnEvent("Click", (*) => this.__SetCharacters())
+        this.AltActive := super.AddCheckbox("x10 y70", "Alt")
+        this.AltActive.OnEvent("Click", (*) => this.__SetCharacters())
         CurrentRow := 1
         For Row in this.Characters {
             For Key in Row {
@@ -141,16 +143,24 @@ class Keymap extends Gui {
     }
 
     __SetCharacters() {
+        Modifier := "$"
+        If this.ShiftActive.Value {
+            Modifier .= "+"
+        }
+        If this.CtrlActive.Value {
+            Modifier .= "^"
+        }
+        If this.WinActive.Value {
+            Modifier .= "#"
+        }
+        If this.AltActive.Value {
+            Modifier .= "!"
+        }
         CurrentRow := 1
         For Row in this.Characters {
             For Key in Row {
                 Key[3].Text := this.ShiftActive.Value ? Key[2] : Key[1]
-                If this.ShiftActive.Value {
-                    Key[3].OnEvent("Click", (GuiControlObject, *) => this.__AssignKey(GuiControlObject.Text, "+"))
-                }
-                Else {
-                    Key[3].OnEvent("Click", (GuiControlObject, *) => this.__AssignKey(GuiControlObject.Text, ""))
-                }
+                Key[3].OnEvent("Click", (GuiControlObject, *) => this.__AssignKey(GuiControlObject.Text, Modifier))
             }
             CurrentRow++
         }
