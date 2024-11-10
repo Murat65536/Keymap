@@ -108,13 +108,17 @@ class Keymap extends Gui {
         Result := this.HotkeyInterface.AddEdit("x10 y20 w120 h20", this.Hotkeys.Has(Name) ? this.Hotkeys[Name] : "")
         Apply := this.HotkeyInterface.AddButton("x10 y40 w60 h20", "Apply")
         Apply.OnEvent("Click", (*) => this.__ActivateHotkey(Modifier . Name, Result.Value))
+        Delete := this.HotkeyInterface.AddButton("x70 y40 w60 h20", "Delete")
+        Delete.OnEvent("Click", (*) => this.__DeactivateHotkey(Modifier . Name))
         this.HotkeyInterface.Show("x0 y" this.WindowHeight / 2 " w" this.WindowWidth " h" this.WindowHeight / 2)
     }
 
     __DeactivateHotkey(Input) {
-        Hotkey(Input, "Off")
-        this.Hotkeys.Delete(Input)
-        this.__SetHotkeys()
+        try {
+            Hotkey(Input, "Off")
+            this.Hotkeys.Delete(Input)
+            this.__SetHotkeys()
+        }
     }
 
     __ActivateHotkey(Input, Output) {
