@@ -9,6 +9,22 @@ class Keymap extends Gui {
         ButtonHeight := 40
         this.Characters := [
             [
+                ["Esc", "Esc", unset],
+                ["F1", "F1", unset],
+                ["F2", "F2", unset],
+                ["F3", "F3", unset],
+                ["F4", "F4", unset],
+                ["F5", "F5", unset],
+                ["F6", "F6", unset],
+                ["F7", "F7", unset],
+                ["F8", "F8", unset],
+                ["F9", "F9", unset],
+                ["F10", "F10", unset],
+                ["F11", "F11", unset],
+                ["F12", "F12", unset]
+
+            ],
+            [
                 ["``", "~", unset],
                 ["1", "!", unset],
                 ["2", "@", unset],
@@ -110,6 +126,8 @@ class Keymap extends Gui {
         Apply.OnEvent("Click", (*) => this.__ActivateHotkey(Modifier . Name, Result.Value))
         Delete := this.HotkeyInterface.AddButton("x70 y40 w60 h20", "Delete")
         Delete.OnEvent("Click", (*) => this.__DeactivateHotkey(Modifier . Name))
+        Close := this.HotkeyInterface.AddButton("x" this.WindowWidth - 60 " y20 w60 h20", "Close")
+        Close.OnEvent("Click", (*) => this.HotkeyInterface.Destroy())
         this.HotkeyInterface.Show("x0 y" this.WindowHeight / 2 " w" this.WindowWidth " h" this.WindowHeight / 2)
     }
 
