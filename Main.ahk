@@ -1,10 +1,11 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
-#Include ScrollBar.ahk
+#Include ScrollableGui.ahk
 
 class Keymap extends Gui {
     __New(WindowWidth, WindowHeight) {
         super.__New(, "Keymap")
+        ScrollableGui.init()
         this.WindowWidth := WindowWidth
         this.WindowHeight := WindowHeight
         this.Hotkeys := []
@@ -29,7 +30,7 @@ class Keymap extends Gui {
         Try {
             this.HotkeyList.Destroy()
         }
-        this.HotkeyList := Gui("+Parent" super.Hwnd " -Caption")
+        this.HotkeyList := Gui("+Parent" super.Hwnd " -Caption +MaxSize")
         Loop this.Hotkeys.Length {
             this.HotkeyList.AddGroupBox("x20 y" 20 + (A_Index - 1) * 110 " w" this.WindowWidth * 0.8 " h100", "Hotkey")
             this.HotkeyList.AddText("x30 y" 40 + (A_Index - 1) * 110 " w100 h20", "Trigger")
@@ -47,8 +48,11 @@ class Keymap extends Gui {
         ; this.Scroll.fMask := 1 | 2
         ; DllCall("SetScrollInfo", "ptr", this.HotkeyList.Hwnd, "int", 1, "ptr", this.Scroll.Ptr, "int", true)
         ; this.Scroll.fMask := 1 | 2 | 4 | 16
-        ; ScrollBar(this.HotkeyList, this.WindowWidth * 0.9, this.WindowHeight)
-        this.HotkeyList.Show("w" this.WindowWidth * 0.9 " h" 110 + (this.Hotkeys.Length - 1) * 110)
+        ; ; ScrollBar(this.HotkeyList, this.WindowWidth * 0.9, this.WindowHeight)
+        this.HotkeyList.Show("x40 y0 w" this.WindowWidth * 0.9 " h" this.WindowHeight " hide")
+        ScrollableGui.register(this.HotkeyList)
+        this.HotkeyList.Show("x40 y0 w" this.WindowWidth * 0.9 " h" 120 + (this.Hotkeys.Length - 1) * 110)
+        ScrollableGui.syncSize(this.HotkeyList)
     }
 
     __UpdateTriggerText(Index, GuiCtrlObj, *) {
