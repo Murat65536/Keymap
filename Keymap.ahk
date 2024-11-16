@@ -3,6 +3,8 @@
 
 class Keymap extends Gui {
     __New(WindowWidth, WindowHeight) {
+        super.__New(, "Keymap")
+        super.OnEvent("Close", (*) => ExitApp())
         this.WindowWidth := WindowWidth
         this.WindowHeight := WindowHeight
         ButtonWidth := 65
@@ -88,8 +90,6 @@ class Keymap extends Gui {
                 ["Space", "Space", unset]
             ]
         ]
-        super.__New()
-        super.OnEvent("Close", (*) => ExitApp())
         this.CtrlActive := super.AddCheckbox("x10 y10", "Ctrl")
         this.CtrlActive.OnEvent("Click", (*) => this.__SetCharacters())
         this.ShiftActive := super.AddCheckbox("x10 y30", "Shift")
